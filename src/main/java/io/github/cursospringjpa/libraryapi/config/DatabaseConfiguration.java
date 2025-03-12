@@ -22,7 +22,7 @@ public class DatabaseConfiguration {
     @Value("${spring.datasource.driver-class-name}")
     String driver;
 
-    @Bean
+    //    @Bean
     public DataSource dataSource(){
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setUrl(url);
@@ -30,25 +30,29 @@ public class DatabaseConfiguration {
         ds.setPassword(password);
         ds.setDriverClassName(driver);
         return ds;
-    } //nao é recomendado usar esse.é basic
+    }
 
+    /**
+     * configuracao Hikary
+     * https://github.com/brettwooldridge/HikariCP
+     * @return
+     */
     @Bean
     public DataSource hikariDataSource(){
+
         HikariConfig config = new HikariConfig();
         config.setUsername(username);
         config.setPassword(password);
         config.setDriverClassName(driver);
         config.setJdbcUrl(url);
 
-        config.setMaximumPoolSize(10); //max de conexao liberada
-        config.setMinimumIdle(1); //tamanho inicial do pool
+        config.setMaximumPoolSize(10); // maximo de conexões liberadas
+        config.setMinimumIdle(1); // tamanho inicial do pool
         config.setPoolName("library-db-pool");
-        config.setMaxLifetime(60000); //600 mil ms(1O MINUTOS)
-        config.setConnectionTimeout(10000); //timeout para validar conexao
-        config.setConnectionTestQuery("select 1"); //query de teste
+        config.setMaxLifetime(600000); // 600 mil ms (10 minutos)
+        config.setConnectionTimeout(100000); // timeout para conseguir uma conexão
+        config.setConnectionTestQuery("select 1"); // query de teste
 
         return new HikariDataSource(config);
-
-
     }
 }

@@ -2,15 +2,21 @@ package io.github.cursospringjpa.libraryapi.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-
 @Entity
-@Table( name = "autor", schema = "public")
-@Data
+@Table(name = "autor", schema = "public")
+@Getter
+@Setter
+@ToString
 public class Autor {
+
 
     @Id
     @Column(name = "id")
@@ -26,13 +32,7 @@ public class Autor {
     @Column(name = "nacionalidade", length = 50, nullable = false)
     private String nacionalidade;
 
-    @OneToMany(mappedBy = "autor")
+    //    @OneToMany(mappedBy = "autor")
+    @Transient
     private List<Livro> livros;
-
-
-    public Autor(String nome, LocalDate dataNascimento, String nacionalidade) {
-        this.nome = nome;
-        this.dataNascimento = dataNascimento;
-        this.nacionalidade = nacionalidade;
-    }
 }

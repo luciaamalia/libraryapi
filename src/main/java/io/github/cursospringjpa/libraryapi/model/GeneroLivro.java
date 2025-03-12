@@ -1,9 +1,9 @@
 package io.github.cursospringjpa.libraryapi.model;
 
 public enum GeneroLivro {
-    FICCCAO,
+    FICCAO,
     FANTASIA,
-    MISIERIO,
+    MISTERIO,
     ROMANCE,
     BIOGRAFIA,
     CIENCIA
