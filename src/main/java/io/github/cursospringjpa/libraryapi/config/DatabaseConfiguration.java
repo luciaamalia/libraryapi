@@ -1,6 +1,4 @@
 package io.github.cursospringjpa.libraryapi.config;
-
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,8 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
-
-@Configuration
+@Configuration //classe de configuracao para o banco de dados
 public class DatabaseConfiguration {
 
     @Value("${spring.datasource.url}")
@@ -23,7 +20,8 @@ public class DatabaseConfiguration {
     String driver;
 
     //    @Bean
-    public DataSource dataSource(){
+    //cria e configura um data source usando o DriverManagerDataSource
+    public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setUrl(url);
         ds.setUsername(username);
@@ -31,14 +29,15 @@ public class DatabaseConfiguration {
         ds.setDriverClassName(driver);
         return ds;
     }
-
+    //dois metodos para fornecer data source
     /**
      * configuracao Hikary
      * https://github.com/brettwooldridge/HikariCP
+     *
      * @return
      */
     @Bean
-    public DataSource hikariDataSource(){
+    public DataSource hikariDataSource() { //configuracao usando o Hikari
 
         HikariConfig config = new HikariConfig();
         config.setUsername(username);
@@ -55,4 +54,16 @@ public class DatabaseConfiguration {
 
         return new HikariDataSource(config);
     }
+
+    /**
+     *
+     *A classe DatabaseConfiguration é responsável por configurar o acesso ao banco de dados na aplicação.
+     *
+     * Ela usa o HikariCP para criar um pool de conexões JDBC, que é
+     * mais eficiente do que uma implementação simples como DriverManagerDataSource.
+     *
+     * As configurações do pool (como tamanho máximo, tempo de vida das conexões,
+     * etc.) são definidas para otimizar o uso de recursos e garantir que a aplicação funcione
+     * de forma estável e performática.
+     */
 }
