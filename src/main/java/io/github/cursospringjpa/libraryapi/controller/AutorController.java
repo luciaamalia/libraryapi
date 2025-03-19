@@ -103,6 +103,6 @@ public class AutorController {
         autor.setDataNascimento(autorResponseDTO.dataNascimento());
 
         service.atualizar(autor);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 }
