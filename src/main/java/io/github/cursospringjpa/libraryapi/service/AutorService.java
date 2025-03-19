@@ -2,6 +2,7 @@ package io.github.cursospringjpa.libraryapi.service;
 
 import io.github.cursospringjpa.libraryapi.model.Autor;
 import io.github.cursospringjpa.libraryapi.repository.AutorRepository;
+import io.github.cursospringjpa.libraryapi.validator.AutorValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,18 +15,24 @@ public class AutorService {
 
     private final AutorRepository autorRepository;
 
-    public AutorService(AutorRepository autorRepository) {
+    private final AutorValidator validator;
+
+    public AutorService(AutorRepository autorRepository, AutorValidator validator) {
         this.autorRepository = autorRepository;
+        this.validator = validator;
     }
 
 
     public Autor salvar(Autor autor){
+        validator.validar(autor);
         return autorRepository.save(autor);
     }
+
     public void atualizar(Autor autor){
         if (autor.getId() == null){
             throw new IllegalArgumentException("Para atualizar é necesário que o autor já esteja salvo");
         }
+        validator.validar(autor);
         autorRepository.save(autor);
     }
 
@@ -49,4 +56,6 @@ public class AutorService {
         return autorRepository.findAll();
 
     }
+
+
 }
