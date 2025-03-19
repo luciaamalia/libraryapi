@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
@@ -55,4 +57,37 @@ public class AutorController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deletarAutor(@PathVariable("id") String id){
+        var idAutor = UUID.fromString(id);
+        Optional<Autor> autorOptional = service.obterPorId(idAutor);
+
+        if (autorOptional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        service.deletarAutor(autorOptional.get());
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<AutorResponseDTO>> pesquisar(
+            //param nao obrigatorios
+            @RequestParam(value ="nome", required=false) String nome,
+            @RequestParam(value = "nacionalidade", required=false) String nacionalidade){
+        List<Autor> resultado = service.pesquisa(nome,nacionalidade);
+        List<AutorResponseDTO> lista = resultado
+                .stream()
+                .map(autor -> new AutorResponseDTO(
+                        autor.getId(),
+                        autor.getNome(),
+                        autor.getDataNascimento(),
+                        autor.getNacionalidade())
+                ).collect(Collectors.toList());
+        //retorna a lista
+                return ResponseEntity.ok(lista);
+    }
+
 }
