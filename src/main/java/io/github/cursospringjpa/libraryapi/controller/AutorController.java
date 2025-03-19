@@ -4,18 +4,14 @@ import io.github.cursospringjpa.libraryapi.controller.dto.AutorDTO;
 import io.github.cursospringjpa.libraryapi.controller.dto.AutorResponseDTO;
 import io.github.cursospringjpa.libraryapi.model.Autor;
 import io.github.cursospringjpa.libraryapi.service.AutorService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/autores")
@@ -72,7 +68,7 @@ public class AutorController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<AutorResponseDTO>> pesquisar(
             //param nao obrigatorios
             @RequestParam(value ="nome", required=false) String nome,
@@ -90,4 +86,23 @@ public class AutorController {
                 return ResponseEntity.ok(lista);
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<Void> atualizar(
+            @PathVariable("id") String id, @RequestBody AutorResponseDTO autorResponseDTO) {
+
+        var idAutor = UUID.fromString(id);
+        Optional<Autor> autorOptional = service.obterPorId(idAutor);
+
+        if (autorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var autor = autorOptional.get();
+        autor.setNome(autorResponseDTO.nome());
+        autor.setNacionalidade(autorResponseDTO.nacionalidade());
+        autor.setDataNascimento(autorResponseDTO.dataNascimento());
+
+        service.atualizar(autor);
+        return ResponseEntity.notFound().build();
+    }
 }
