@@ -7,6 +7,7 @@ import io.github.cursospringjpa.libraryapi.exceptions.RegistroDuplicadoException
 import io.github.cursospringjpa.libraryapi.model.Autor;
 import io.github.cursospringjpa.libraryapi.service.AutorService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,8 +17,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
 @RestController
-@RequestMapping("/autores")
+@RequestMapping("autores")
 public class AutorController {
 
     private final AutorService service;
@@ -81,7 +83,7 @@ public class AutorController {
             //param nao obrigatorios
             @RequestParam(value ="nome", required=false) String nome,
             @RequestParam(value = "nacionalidade", required=false) String nacionalidade){
-        List<Autor> resultado = service.pesquisa(nome,nacionalidade);
+        List<Autor> resultado = service.pesquisaByExample(nome,nacionalidade);
         List<AutorResponseDTO> lista = resultado
                 .stream()
                 .map(autor -> new AutorResponseDTO(

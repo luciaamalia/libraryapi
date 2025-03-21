@@ -2,7 +2,11 @@ package io.github.cursospringjpa.libraryapi.service;
 
 import io.github.cursospringjpa.libraryapi.model.Autor;
 import io.github.cursospringjpa.libraryapi.repository.AutorRepository;
+import io.github.cursospringjpa.libraryapi.repository.LivroRepository;
 import io.github.cursospringjpa.libraryapi.validator.AutorValidator;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,14 +18,14 @@ public class AutorService {
     //serviço trata a camada de dominio (entidade)
 
     private final AutorRepository autorRepository;
-
+    private final LivroRepository livroRepository;
     private final AutorValidator validator;
 
-    public AutorService(AutorRepository autorRepository, AutorValidator validator) {
+    public AutorService(AutorRepository autorRepository, LivroRepository livroRepository, AutorValidator validator) {
         this.autorRepository = autorRepository;
+        this.livroRepository = livroRepository;
         this.validator = validator;
     }
-
 
     public Autor salvar(Autor autor){
         validator.validar(autor);
@@ -54,7 +58,21 @@ public class AutorService {
             return autorRepository.findByNacionalidade(nacionalidade);
         }
         return autorRepository.findAll();
+    }
 
+    public List<Autor> pesquisaByExample(String nome, String nacionalidade){
+        var autor = new Autor();
+        autor.setNome(nome);
+        autor.setNacionalidade(nacionalidade);
+
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Autor> autorExample = Example.of(autor, matcher);
+
+        return autorRepository.findAll(autorExample);
     }
 
 
