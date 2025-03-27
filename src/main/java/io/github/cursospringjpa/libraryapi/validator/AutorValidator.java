@@ -17,8 +17,8 @@ public class AutorValidator {
     }
 
     public void validar(Autor autor){
-        if (existeAutorCadastrado(autor)){
-            throw new RegistroDuplicadoException("Já existe esse autor cadastrado");
+        if(existeAutorCadastrado(autor)){
+            throw new RegistroDuplicadoException("Autor já cadastrado!");
         }
     }
 
@@ -28,10 +28,9 @@ public class AutorValidator {
         );
 
         if(autor.getId() == null){
-            return autorEncontrado.isPresent();
+            return autorEncontrado.isPresent() ;
         }
 
         return !autor.getId().equals(autorEncontrado.get().getId()) && autorEncontrado.isPresent();
-
     }
 }

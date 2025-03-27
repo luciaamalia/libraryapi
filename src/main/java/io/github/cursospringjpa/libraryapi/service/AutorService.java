@@ -1,5 +1,6 @@
 package io.github.cursospringjpa.libraryapi.service;
 
+import io.github.cursospringjpa.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.cursospringjpa.libraryapi.model.Autor;
 import io.github.cursospringjpa.libraryapi.repository.AutorRepository;
 import io.github.cursospringjpa.libraryapi.repository.LivroRepository;
@@ -45,8 +46,13 @@ public class AutorService {
     }
 
     public void deletarAutor(Autor autor){
+        if (possuiLivro(autor)){
+            throw new OperacaoNaoPermitidaException("Não é permitido excluir um Autor" +
+                    " que possui livros cadastrados");
+        }
         autorRepository.delete(autor);
     }
+
     public List<Autor> pesquisa(String nome, String nacionalidade){
         if(nome != null && nacionalidade != null){
             return autorRepository.findByNomeAndNacionalidade(nome, nacionalidade);
@@ -67,13 +73,16 @@ public class AutorService {
 
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
+                .withIgnorePaths("id", "dataNascimento", "dataCadastro")
                 .withIgnoreNullValues()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
         Example<Autor> autorExample = Example.of(autor, matcher);
-
         return autorRepository.findAll(autorExample);
     }
 
+    public boolean possuiLivro(Autor autor){
+        return livroRepository.existsByAutor(autor);
+    }
 
 }

@@ -3,11 +3,11 @@ package io.github.cursospringjpa.libraryapi.controller;
 import io.github.cursospringjpa.libraryapi.controller.dto.AutorDTO;
 import io.github.cursospringjpa.libraryapi.controller.dto.AutorResponseDTO;
 import io.github.cursospringjpa.libraryapi.controller.dto.ErroResponse;
+import io.github.cursospringjpa.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.cursospringjpa.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.cursospringjpa.libraryapi.model.Autor;
 import io.github.cursospringjpa.libraryapi.service.AutorService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -65,17 +65,22 @@ public class AutorController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deletarAutor(@PathVariable("id") String id){
-        var idAutor = UUID.fromString(id);
-        Optional<Autor> autorOptional = service.obterPorId(idAutor);
+    public ResponseEntity<Object> deletarAutor(@PathVariable("id") String id){
+        try {
+            var idAutor = UUID.fromString(id);
+            Optional<Autor> autorOptional = service.obterPorId(idAutor);
 
-        if (autorOptional.isEmpty()){
-            return ResponseEntity.notFound().build();
+            if (autorOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            service.deletarAutor(autorOptional.get());
+
+            return ResponseEntity.noContent().build();
+        }catch (OperacaoNaoPermitidaException e){
+            var erroResponse = ErroResponse.respostaPadrao(e.getMessage());
+            return ResponseEntity.status(erroResponse.status()).body(erroResponse);
         }
-
-        service.deletarAutor(autorOptional.get());
-
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping

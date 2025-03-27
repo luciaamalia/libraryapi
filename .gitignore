@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+src/test/java/io/github/cursospringjpa/libraryapi/repository/LivroRepositoryTest.java
+src/test/java/io/github/cursospringjpa/libraryapi/repository/AutorRepositoryTest.java
+src/test/java/io/github/cursospringjpa/libraryapi/repository/AutorRepositoryTest.java
+src/test/java/io/github/cursospringjpa/libraryapi/repository/AutorRepositoryTest.java
