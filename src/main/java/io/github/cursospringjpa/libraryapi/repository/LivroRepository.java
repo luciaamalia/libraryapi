@@ -3,7 +3,10 @@ package io.github.cursospringjpa.libraryapi.repository;
 import io.github.cursospringjpa.libraryapi.model.Autor;
 import io.github.cursospringjpa.libraryapi.model.GeneroLivro;
 import io.github.cursospringjpa.libraryapi.model.Livro;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,11 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
+public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecificationExecutor<Livro> {
 
-public interface LivroRepository extends JpaRepository<Livro, UUID> {
+    Page<Livro> findByAutor(Autor autor, Pageable pageable);
 
     // Query Method
     // select * from livro where id_autor = id
@@ -26,7 +31,7 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     List<Livro> findByTitulo(String titulo);
 
     // select * from livro where isbn = ?
-    List<Livro> findByIsbn(String isbn);
+    Optional<Livro> findByIsbn(String isbn);
 
     // select * from livro where titulo = ? and preco = ?
     List<Livro> findByTituloAndPreco(String titulo, BigDecimal preco);
