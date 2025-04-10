@@ -1,6 +1,5 @@
 package io.github.cursospringjpa.libraryapi.validator;
-
-
+import io.github.cursospringjpa.libraryapi.exceptions.CampoInvalidoException;
 import io.github.cursospringjpa.libraryapi.exceptions.RegistroDuplicadoException;
 import io.github.cursospringjpa.libraryapi.model.Livro;
 import io.github.cursospringjpa.libraryapi.repository.LivroRepository;
@@ -25,7 +24,7 @@ public class LivroValidator {
         }
 
         if(isPrecoObrigatorioNulo(livro)){
-           // throw new CampoInvalidoException("preco", "Para livros com ano de publicação a partir de 2020, o preço é obrigatório.");
+           throw new CampoInvalidoException("preco", "Para livros com ano de publicação a partir de 2020, o preço é obrigatório.");
         }
     }
 
