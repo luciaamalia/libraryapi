@@ -31,26 +31,26 @@ API para gerenciamento de livros e autores, desenvolvida com **Spring Boot**, ba
 
 ---
 
-## 🐳 Como Rodar com Docker
+## 🐳 Subindo os Containers
 
-### 1. Subir containers PostgreSQL + PgAdmin
+Dentro do projeto, há um arquivo com os comandos necessários para subir os containers do PostgreSQL e PgAdmin:
 
-```bash
-# PostgreSQL
-docker network create library-network
+📁 `comandos-docker.txt` 
 
-docker run --name librarydb \
-  -e POSTGRES_PASSWORD=suasenha \
-  -e POSTGRES_USER=seuuser \
-  -e POSTGRES_DB=library \
-  -p 5432:5432 \
-  -d --network library-network \
-  postgres:16.3
+E também há um arquivo para criar as tabelas, caso necessário.
 
-# PgAdmin
-docker run --name pgadmin4 \
-  -e PGADMIN_DEFAULT_EMAIL=admin@admin.com \
-  -e PGADMIN_DEFAULT_PASSWORD=admin \
-  -p 15432:80 \
-  -d --network library-network \
-  dpage/pgadmin4:8.9
+📁 `comandos-sql.txt` 
+
+---
+  🛠️ Funcionalidades
+Cadastro e busca de autores.
+
+Cadastro e pesquisa de livros com filtros dinâmicos (via Specifications).
+
+Validações personalizadas.
+
+Tratamento centralizado de exceções.
+
+Mapeamento de DTOs com boas práticas.
+
+
