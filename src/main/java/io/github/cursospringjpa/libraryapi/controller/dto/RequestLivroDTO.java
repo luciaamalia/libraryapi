@@ -24,4 +24,5 @@ public record RequestLivroDTO(
         @NotNull(message = "campo obrigatorio")
         UUID idAutor
 ) {
+
 }

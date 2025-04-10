@@ -13,6 +13,6 @@ public record ResponsePesquisaDTO(
         LocalDate dataPublicacao,
         GeneroLivro genero,
         BigDecimal preco,
-        AutorDTO autorDTO
+        AutorDTO autor
 ) {
 }
